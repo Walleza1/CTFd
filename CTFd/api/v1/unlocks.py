@@ -42,16 +42,16 @@ class UnlockList(Resource):
         Model = get_class_by_tablename(req["type"])
         target = Model.query.filter_by(id=req["target"]).first_or_404()
 
-        if target.cost > user.score:
-            return (
-                {
-                    "success": False,
-                    "errors": {
-                        "score": "You do not have enough points to unlock this hint"
-                    },
-                },
-                400,
-            )
+        # if target.cost > user.score:
+        #     return (
+        #         {
+        #             "success": False,
+        #             "errors": {
+        #                 "score": "You do not have enough points to unlock this hint"
+        #             },
+        #         },
+        #         400,
+        #     )
 
         schema = UnlockSchema()
         response = schema.load(req, session=db.session)
