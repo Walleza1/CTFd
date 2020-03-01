@@ -35,8 +35,12 @@ if [ -n "$DATABASE_URL" ]
 fi
 
 # Initialize database
-python manage.py db upgrade
-
+# python manage.py db upgrade
+if [ -f "/tmp/CTFd.zip" ]; then
+	python import.py /tmp/CTFd.zip
+else
+	python manage.py db upgrade
+fi
 # Start CTFd
 echo "Starting CTFd"
 exec gunicorn 'CTFd:create_app()' \
