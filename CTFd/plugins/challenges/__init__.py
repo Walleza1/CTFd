@@ -73,6 +73,7 @@ class CTFdStandardChallenge(BaseChallenge):
             "name": challenge.name,
             "value": challenge.value,
             "description": challenge.description,
+            "result": challenge.result,
             "category": challenge.category,
             "state": challenge.state,
             "max_attempts": challenge.max_attempts,
