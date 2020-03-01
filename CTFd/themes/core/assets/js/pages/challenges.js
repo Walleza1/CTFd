@@ -58,8 +58,11 @@ const displayChal = chal => {
     challenge_data["description"] = challenge.render(
       challenge_data["description"]
     );
+    challenge_data["result"] = challenge.render(
+      challenge_data["result"]
+    );
     challenge_data["script_root"] = CTFd.config.urlRoot;
-
+    console.log(challenge_data);
     $("#challenge-window").append(template.render(challenge_data));
 
     $(".challenge-solves").click(function(event) {

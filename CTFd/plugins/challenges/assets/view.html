@@ -16,6 +16,10 @@
 						</a>
 					</li>
 				{% endif %}
+					<li class="nav-item">
+						<a class ="nav-link challenge-results" href="#results">Skills
+						</a>
+					</li>
 			</ul>
 			<div role="tabpanel">
 				<div class="tab-content">
@@ -115,6 +119,14 @@
 							</div>
 						</div>
 					</div>
+					<div role="tabpanel" class="tab-pane fade" id="results">
+						<div class="row">
+							<div class="col-md-12">
+								<span class="challenge-res">{{ result | safe }}</span>
+							</div>
+						</div>
+					</div>
+
 				</div>
 			</div>
 		</div>

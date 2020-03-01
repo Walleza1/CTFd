@@ -45,6 +45,32 @@
 		</div>
 	</div>
 
+	<ul class="nav nav-tabs" role="tablist" id="new-res-edit">
+		<li class="nav-item">
+			<a class="nav-link active" href="#new-res-write" aria-controls="home" role="tab"
+			   data-toggle="tab" tabindex="-1">Write</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="#new-res-preview" aria-controls="home" role="tab" data-toggle="tab" tabindex="-1">Preview</a>
+		</li>
+	</ul>
+
+	<div class="tab-content">
+		<div role="tabpanel" class="tab-pane active" id="new-res-write">
+			<div class="form-group">
+				<label>
+					Result:<br>
+					<small class="form-text text-muted">
+						Give information about what skills they'll learn.
+					</small>
+				</label>
+				<textarea id="new-res-editor" class="form-control" name="result" rows="10"></textarea>
+			</div>
+		</div>
+		<div role="tabpanel" class="tab-pane content" id="new-res-preview" style="height:234px; overflow-y: scroll;">
+		</div>
+	</div>
+
 	<div class="form-group">
 		<label>
 			Value:<br>

@@ -9,6 +9,14 @@ CTFd.plugin.run((_CTFd) => {
             );
         }
     });
+    $('a[href="#new-res-preview"]').on('shown.bs.tab', function (event) {
+        if (event.target.hash == '#new-res-preview') {
+            var editor_value = $('#new-res-editor').val();
+            $(event.target.hash).html(
+                md.render(editor_value)
+            );
+        }
+    });
     // $('#desc-edit').on('shown.bs.tab', function (event) {
     //     if (event.target.hash == '#desc-preview') {
     //         var editor_value = $('#desc-editor').val();

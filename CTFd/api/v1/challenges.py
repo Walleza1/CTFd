@@ -6,12 +6,13 @@ from sqlalchemy.sql import and_
 
 from CTFd.cache import clear_standings
 from CTFd.models import ChallengeFiles as ChallengeFilesModel
-from CTFd.models import Challenges, Fails, Flags, Hints, HintUnlocks, Solves, Tags, db
+from CTFd.models import Challenges, Fails, Flags, Hints, HintUnlocks, Solves, Tags, db, Competences
 from CTFd.plugins.challenges import CHALLENGE_CLASSES, get_chal_class
 from CTFd.schemas.flags import FlagSchema
 from CTFd.schemas.hints import HintSchema
 from CTFd.schemas.tags import TagSchema
 from CTFd.schemas.competences import CompetenceSchema
+from CTFd.schemas.challenges import ChallengeSchema
 from CTFd.utils import config, get_config
 from CTFd.utils import user as current_user
 from CTFd.utils.config.visibility import (
@@ -110,6 +111,7 @@ class ChallengeList(Resource):
                     "value": challenge.value,
                     "level": challenge.level,
                     "category": challenge.category,
+                    "result": challenge.result,
                     "tags": tag_schema.dump(challenge.tags).data,
                     "competences": comp_schema.dump(challenge.competences).data,
                     "template": challenge_type.templates["view"],
@@ -150,6 +152,52 @@ class ChallengeLevel(Resource):
                     "type": challenge_type.name,
                     "name": challenge.name,
                     "value": challenge.value,
+                    "category": challenge.category,
+                    "result": challenge.result,
+                    "level": challenge.level,
+                    "tags": tag_schema.dump(challenge.tags).data,
+                    "competences": comp_schema.dump(challenge.competences).data,
+                    "template": challenge_type.templates["view"],
+                    "script": challenge_type.scripts["view"],
+                }
+            )
+        db.session.close()
+        return {"success": True, "data": response}
+
+
+@challenges_namespace.route("/skill/<skill_id>")
+@challenges_namespace.param("skill_id", "A value to filter")
+class ChallengeCompetence(Resource):
+    @check_challenge_visibility
+    @during_ctf_time_only
+    @require_verified_emails
+    def get(self, skill_id):
+        skills = (Competences.query.
+                  filter(Competences.id == skill_id)).all()
+        schema = ChallengeSchema(only=["id"], many=True)
+        for skill in skills:
+            data = schema.dump(skill.challenge_id).data
+            chall_ids = []
+            for chall in data:
+                chall_ids += chall.values()
+
+        challenges = (Challenges.query.
+                      filter(Challenges.id.in_(chall_ids))).all()
+        log("debug",
+            "{date} - {data} ",
+            data=challenges)
+        tag_schema = TagSchema(view="user", many=True)
+        comp_schema = CompetenceSchema(view="user", many=True)
+        response = []
+        for challenge in challenges:
+            challenge_type = get_chal_class(challenge.type)
+            response.append(
+                {
+                    "id": challenge.id,
+                    "type": challenge_type.name,
+                    "name": challenge.name,
+                    "value": challenge.value,
+                    "result": challenge.result,
                     "category": challenge.category,
                     "level": challenge.level,
                     "tags": tag_schema.dump(challenge.tags).data,
